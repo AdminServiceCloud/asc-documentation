@@ -25,7 +25,7 @@ Open source CLI-утилита и демон на Rust, устанавливае
 | 📊 Мониторинг системы и приложений | [monitoring](monitoring.md) |
 | 💾 Бекапы приложений | [backups](backups.md) |
 | 📁 SFTP-сервер по приложению | [sftp](sftp.md) |
-| 🖥️ WebSocket- и SSH-консоли | [console](console.md) |
+| 🖥️ WebSocket-консоль приложений | [console](console.md) |
 | ⏰ Планировщик задач | [scheduler](scheduler.md) |
 | 🔄 Утилита обновлений asc-updater | [updater](updater.md) |
 

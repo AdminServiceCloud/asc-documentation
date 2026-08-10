@@ -25,7 +25,7 @@ Open source CLI utility and daemon written in Rust, installed on the user's serv
 | 📊 System and application monitoring | [monitoring](monitoring.md) |
 | 💾 Application backups | [backups](backups.md) |
 | 📁 Per-application SFTP server | [sftp](sftp.md) |
-| 🖥️ WebSocket and SSH consoles | [console](console.md) |
+| 🖥️ WebSocket application console | [console](console.md) |
 | ⏰ Task scheduler | [scheduler](scheduler.md) |
 | 🔄 The asc-updater update utility | [updater](updater.md) |
 

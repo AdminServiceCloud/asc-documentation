@@ -36,7 +36,7 @@ hero:
     <ArticleCard icon="📊" title="Monitoring" details="System and application monitoring." link="/cli/monitoring" />
     <ArticleCard icon="💾" title="Backups" details="Application backup, restore and rotation." link="/cli/backups" />
     <ArticleCard icon="📁" title="SFTP" details="Per-application SFTP server." link="/cli/sftp" />
-    <ArticleCard icon="🖥️" title="Console" details="WebSocket and SSH consoles." link="/cli/console" />
+    <ArticleCard icon="🖥️" title="Console" details="WebSocket application console and live logs." link="/cli/console" />
     <ArticleCard icon="⏰" title="Scheduler" details="Task scheduler for recurring jobs." link="/cli/scheduler" />
     <ArticleCard icon="🔄" title="Updater" details="asc-updater — auto-updates, channels, rollback." link="/cli/updater" />
   </div>
