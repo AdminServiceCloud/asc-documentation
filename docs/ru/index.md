@@ -39,6 +39,7 @@ hero:
     <ArticleCard icon="🖥️" title="Консоль" details="WebSocket-консоль приложений и live-логи." link="/ru/cli/console" />
     <ArticleCard icon="⏰" title="Планировщик" details="Планировщик повторяющихся задач." link="/ru/cli/scheduler" />
     <ArticleCard icon="🔄" title="Обновления" details="asc-updater — автообновления, каналы, откат." link="/ru/cli/updater" />
+    <ArticleCard icon="🔗" title="Платформа" details="Подключение ноды по токену регистрации или через asc connect." link="/ru/cli/platform" />
   </div>
 
   <h2 class="mb-6 mt-14 text-xl font-semibold text-foreground">Платформа</h2>

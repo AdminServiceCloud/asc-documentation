@@ -19,6 +19,7 @@ const cliSidebarEn = [
       { text: "Console", link: "/cli/console" },
       { text: "Scheduler", link: "/cli/scheduler" },
       { text: "Updater", link: "/cli/updater" },
+      { text: "Connecting to the platform", link: "/cli/platform" },
     ],
   },
   {
@@ -36,6 +37,7 @@ const cliSidebarEn = [
       { text: "mcp", link: "/commands/mcp" },
       { text: "service", link: "/commands/service" },
       { text: "status", link: "/commands/status" },
+      { text: "connect", link: "/commands/connect" },
       { text: "stats", link: "/commands/stats" },
       { text: "app", link: "/commands/app" },
       { text: "ls", link: "/commands/ls" },
@@ -74,6 +76,7 @@ const cliSidebarRu = [
       { text: "Консоль", link: "/ru/cli/console" },
       { text: "Планировщик", link: "/ru/cli/scheduler" },
       { text: "Обновления", link: "/ru/cli/updater" },
+      { text: "Подключение к платформе", link: "/ru/cli/platform" },
     ],
   },
   {
@@ -91,6 +94,7 @@ const cliSidebarRu = [
       { text: "mcp", link: "/ru/commands/mcp" },
       { text: "service", link: "/ru/commands/service" },
       { text: "status", link: "/ru/commands/status" },
+      { text: "connect", link: "/ru/commands/connect" },
       { text: "stats", link: "/ru/commands/stats" },
       { text: "app", link: "/ru/commands/app" },
       { text: "ls", link: "/ru/commands/ls" },
