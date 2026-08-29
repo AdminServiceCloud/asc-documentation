@@ -9,6 +9,7 @@ guides and background (not just flags), see the [CLI overview](/cli/).
 | [🚀 serve](/commands/serve) | Run the daemon in the foreground |
 | [🤖 mcp](/commands/mcp) | Expose the local daemon as an MCP server |
 | [🧰 service](/commands/service) | Manage the systemd service |
+| [🔐 api](/commands/api) | Daemon API state and its bearer tokens |
 | [📋 status](/commands/status) | Daemon version, service state, apps summary |
 | [📊 stats](/commands/stats) | CPU/memory/disk usage per app |
 | [📱 app](/commands/app) | Manage apps (list, install, start, stop, logs, ...) |

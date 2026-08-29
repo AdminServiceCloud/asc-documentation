@@ -30,6 +30,7 @@ hero:
   <h2 class="mb-6 text-xl font-semibold text-foreground">CLI (asc-daemon)</h2>
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
     <ArticleCard icon="📡" title="API: gRPC + REST" details="ConnectRPC, REST-транспорт, токены и аутентификация через unix-сокет." link="/ru/cli/api" />
+    <ArticleCard icon="🔐" title="Токены безопасности" details="Основной и временные токены, запретный список, ротация с окном совместимости, отзыв." link="/ru/cli/security-tokens" />
     <ArticleCard icon="📱" title="Управление приложениями" details="Docker и нативные приложения, команды жизненного цикла CLI." link="/ru/cli/app-management" />
     <ArticleCard icon="📦" title="Пакетный менеджер" details="Манифесты asc.yaml, реестры, asc install." link="/ru/cli/package-manager" />
     <ArticleCard icon="🤖" title="MCP-сервер" details="Model Context Protocol сервер для AI-агентов." link="/ru/cli/mcp-server" />
