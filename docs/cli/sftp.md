@@ -2,11 +2,10 @@
 
 ## 📌 Description
 
-A built-in SFTP server with per-application isolation: a user gets access to the files of a **specific application**, not the whole server. The foundation of the file manager in the platform UI and access for any SFTP client (FileZilla, WinSCP).
+A built-in SFTP server with per-application isolation: a user gets access to the files of a **specific application**, not the whole server — their own SFTP client (FileZilla, WinSCP, `sftp`), not a browser tab. This is a different feature from the platform UI's [file manager](files), which browses a whole node's filesystem through the daemon's `FileService`.
 
 ## 🎯 Scenarios
 
-- 🖥️ The file manager in the platform UI (FE-008): browsing, uploading, editing application files.
 - 🔧 A developer connects FileZilla to `sftp://node:2022` with credentials issued by the platform and sees only their application's directory.
 - 🎮 A game designer uploads mods to a game server without OS access.
 
@@ -21,4 +20,4 @@ A built-in SFTP server with per-application isolation: a user gets access to the
 
 ## 🔗 Related tasks
 
-DMN-010, FE-008 in [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).
+DMN-010 in [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).

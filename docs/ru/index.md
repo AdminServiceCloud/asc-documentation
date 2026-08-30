@@ -37,6 +37,7 @@ hero:
     <ArticleCard icon="📊" title="Мониторинг" details="Мониторинг системы и приложений." link="/ru/cli/monitoring" />
     <ArticleCard icon="💾" title="Бекапы" details="Создание, восстановление и ротация бекапов приложений." link="/ru/cli/backups" />
     <ArticleCard icon="📁" title="SFTP" details="SFTP-сервер по приложению." link="/ru/cli/sftp" />
+    <ArticleCard icon="📁" title="Файлы" details="Файловый API ноды: обзор, передача, архивирование." link="/ru/cli/files" />
     <ArticleCard icon="🖥️" title="Консоль" details="WebSocket-консоль приложений и live-логи." link="/ru/cli/console" />
     <ArticleCard icon="⏰" title="Планировщик" details="Планировщик повторяющихся задач." link="/ru/cli/scheduler" />
     <ArticleCard icon="🔄" title="Обновления" details="asc-updater — автообновления, каналы, откат." link="/ru/cli/updater" />
