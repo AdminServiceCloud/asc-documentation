@@ -61,3 +61,7 @@ asc search example-web
 ```
 
 Проверяйте JSON по [схемам registry](https://github.com/AdminServiceCloud/registry/tree/main/schema). `sudo asc source add` делает источник общим для всех пользователей сервера; без sudo он доступен только текущему пользователю.
+
+## Источники под управлением платформы
+
+`SourceService` — API-эквивалент `sudo asc source add/remove`: то, как платформа AdminService.Cloud выкладывает реестры организации на подключённую ноду без доступа по SSH. `ListSources` отдаёт только системный список; `ReplaceSources` — его идемпотентная полная замена (включая удаления), поэтому на ноде под управлением платформы источник, добавленный вручную через `sudo asc source add`, будет удалён следующим пушем, если его нет в списке платформы. Анонсируется через `capabilities` в `GetStatus` как `"sources"`.

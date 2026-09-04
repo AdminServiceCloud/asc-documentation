@@ -61,3 +61,7 @@ asc search example-web
 ```
 
 Use the [registry schemas](https://github.com/AdminServiceCloud/registry/tree/main/schema) to validate JSON. `sudo asc source add` makes the source available to all server users; without sudo it is per-user.
+
+## Platform-managed sources
+
+`SourceService` is the API equivalent of `sudo asc source add/remove` — how the AdminService.Cloud platform pushes an organization's registries onto a connected node without SSH access. `ListSources` returns the system-scope list only; `ReplaceSources` is an idempotent full replace of it (deletions included), so once a node is platform-managed, a source added by hand with `sudo asc source add` is removed by the next push unless it's also in the platform's own list. Advertised via `GetStatus`'s `capabilities` as `"sources"`.
