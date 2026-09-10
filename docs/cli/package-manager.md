@@ -119,6 +119,19 @@ settings:
 - **Applying changes**: a container's configuration is fixed at creation, so on the next `asc app start` / `asc app restart` the daemon compares the desired state — env, published ports, volumes, quota, start command — with the container's actual one and **recreates the container** when they differ (or when the container is missing). App data lives in volumes and survives the recreate. If the desired state cannot be computed (say, the registry source is gone), the app still starts as is — availability wins, with a warning in the log.
 - Changing settings — **`asc app settings <id>`**: an interactive editor in the terminal. It first shows the **categories** — `environments` (string/number/boolean/enum/secret settings), `ports`, `volumes`, `quota`, `start_command` — then the settings of the picked category: pick one by number, enter a value, and it is validated against the definition (type, `limits`, enum `values`; secrets are masked in the list; ports and volumes take space-separated lists). Also via the platform UI. After a change the application is restarted (`asc app restart <id>`).
 - **`allow_custom` (type: enum only)** — accepts any value outside the declared `values` list as free text, instead of rejecting it. Use it for enums that list common presets but should not lock the user out of a value the author didn't anticipate (a game branch/build id, a custom world name). The numbered picker in `asc app settings` still lists the presets; typing anything else is simply accepted.
+- **API access** (DMN-078): `GET`/`PUT /v1/apps/{id}/settings` over the daemon's REST API, and the equivalent `AppService.GetAppSettings`/`SetAppSettings` over gRPC — the same values as the CLI editor, `values_json`/`values` as a JSON object rather than `google.protobuf.Struct` (which would turn an integer like a port into a double). A write returns `restart_required: true` when the app is currently running and its live configuration would now drift from the saved values — the caller should offer `asc app restart <id>` (or the platform's own restart action); a stopped app always answers `false`, since its values simply apply on the next start.
+
+#### 🔌 Environment group delivery (`$env`)
+
+Alongside the reserved `$quota`/`$start_command`/`$backup` keys, `settings.json` accepts a fourth one: **`$env`** — an object of arbitrary `NAME: value` string pairs. It exists for the platform's Environment groups (org/project-scoped variable sets — [🌱 environments](https://github.com/AdminServiceCloud/asc-platform/blob/main/docs/features/environments.md)): a group connected to an app is resolved and merged by the platform, then written under this key the same way any other setting is, so it rides the same `settings.json` → apply-on-(re)start pipeline as everything above — no separate delivery channel.
+
+```json
+{ "$env": { "BOT_TOKEN": "…", "TZ": "Europe/Moscow" } }
+```
+
+- Names must match `^[A-Za-z_][A-Za-z0-9_]*$`; a malformed entry is rejected when the values are saved, like any other setting.
+- **Precedence**: a package-declared setting with a matching `env:` key — and an actual value — always wins over a same-named `$env` entry. The user configured that value explicitly, in the app's own settings, which is a more specific and deliberate choice than an org/project-wide default. An `$env` entry with no matching package setting reaches the container env unconditionally.
+- Not shown by `asc app settings`'s interactive editor (it is platform-managed) but preserved untouched by it, like any key the editor does not recognize.
 
 ### 📏 Resource quota (quota)
 
@@ -148,7 +161,7 @@ start_command: "steamcmd +force_install_dir /data +login anonymous +app_update $
 - The substitution is performed by the daemon at install/upgrade time from the app's env — the setting values with `env:` keys, defaults included. An unresolved variable fails the install naming the variable.
 - **Docker apps**: the command replaces what the image would run (the entrypoint becomes `/bin/sh -c`, so arguments and quoting work as in a shell).
 - **native apps**: the command overrides `runtime.start` from `asc.yaml`.
-- Interpolation from the application's *final* environment (org/node/application env levels — [🌱 environments](https://github.com/AdminServiceCloud/asc-platform/blob/main/docs/features/environments.md)) and a UI preview of the computed command are a next increment; setting values already reach the app as env variables (see the settings section above).
+- Interpolation resolves `${VAR}` against the app's whole computed environment — the setting values with `env:` keys **and** any `$env` entries from a connected Environment group (see above) — so a start command can reference a group-delivered variable too, as long as it was written to `settings.json` before the (re)start that recomputes the command. A UI preview of the computed command on the platform is a next increment ([🌱 environments](https://github.com/AdminServiceCloud/asc-platform/blob/main/docs/features/environments.md)).
 - **User override** (DMN-030): the `start_command` category of `asc app settings` replaces the package's command for this instance (`'-'` resets back); `${VAR}` references resolve from the settings env when the override is applied.
 
 ### 🐳 install/update scripts: native or docker
