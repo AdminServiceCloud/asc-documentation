@@ -66,9 +66,9 @@ const cliSidebarRu = [
     text: "CLI (asc-daemon)",
     items: [
       { text: "Обзор", link: "/ru/cli/" },
-      { text: "РќР°С‡Р°Р»Рѕ СЂР°Р±РѕС‚С‹", link: "/ru/cli/getting-started" },
-      { text: "РџРѕРґРґРµСЂР¶РєР° ASC РІ СЂРµРїРѕР·РёС‚РѕСЂРёРё", link: "/ru/cli/repository-support" },
-      { text: "РЎРѕР·РґР°РЅРёРµ СЃРІРѕРµРіРѕ registry", link: "/ru/cli/custom-registry" },
+      { text: "Начало работы", link: "/ru/cli/getting-started" },
+      { text: "Поддержка ASC в репозитории", link: "/ru/cli/repository-support" },
+      { text: "Создание своего registry", link: "/ru/cli/custom-registry" },
       { text: "API: gRPC + REST", link: "/ru/cli/api" },
       { text: "Токены безопасности", link: "/ru/cli/security-tokens" },
       { text: "Управление приложениями", link: "/ru/cli/app-management" },
