@@ -54,7 +54,7 @@ Clone an app instance (data, env, settings) into a new one.
 ### install
 
 ```
-asc app install <spec> [--source <name>] [--name <name>] [--branch <branch> | --tag <tag>] [--image | --build]
+asc app install <spec> [--source <name>] [--name <name>] [--branch <branch> | --tag <tag>] [--path <subdir>] [--image | --build]
 ```
 
 Install an app from a registry or a git repository URL — same as top-level

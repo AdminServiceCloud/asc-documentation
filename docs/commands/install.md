@@ -7,7 +7,7 @@ optional `@<version>`) or directly from a git repository URL (`https://`,
 ## Usage
 
 ```
-asc install <spec> [--source <name>] [--name <name>] [--branch <branch> | --tag <tag>] [--image | --build]
+asc install <spec> [--source <name>] [--name <name>] [--branch <branch> | --tag <tag>] [--path <subdir>] [--image | --build]
 ```
 
 ## Options
@@ -21,6 +21,8 @@ asc install <spec> [--source <name>] [--name <name>] [--branch <branch> | --tag 
   only); conflicts with `--tag`.
 - **`--tag <tag>`** — tag to check out (direct repository installs only);
   conflicts with `--branch`.
+- **`--path <subdir>`** — in-repository subdirectory of the manifest, for a
+  monorepo package (direct repository installs only).
 - **`--image`** — pull the prebuilt image when the manifest offers both
   `image` and `image-build`, skipping the interactive choice; conflicts with
   `--build`.
