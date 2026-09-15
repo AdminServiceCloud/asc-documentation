@@ -55,7 +55,7 @@ asc app clone <id> [--name <имя>]
 ### install
 
 ```
-asc app install <spec> [--source <имя>] [--name <имя>] [--branch <ветка> | --tag <тег>] [--path <подкаталог>] [--image | --build]
+asc app install <spec> [--source <имя>] [--name <имя>] [--branch <ветка> | --tag <тег>] [--path <подкаталог>] [--app <приложение стека>] [--force] [--image | --build]
 ```
 
 Установить приложение из реестра или git-репозитория — то же самое, что

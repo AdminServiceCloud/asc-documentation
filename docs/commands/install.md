@@ -7,7 +7,7 @@ optional `@<version>`) or directly from a git repository URL (`https://`,
 ## Usage
 
 ```
-asc install <spec> [--source <name>] [--name <name>] [--branch <branch> | --tag <tag>] [--path <subdir>] [--image | --build]
+asc install <spec> [--source <name>] [--name <name>] [--branch <branch> | --tag <tag>] [--path <subdir>] [--app <stack app>] [--force] [--image | --build]
 ```
 
 ## Options
@@ -23,6 +23,12 @@ asc install <spec> [--source <name>] [--name <name>] [--branch <branch> | --tag 
   conflicts with `--branch`.
 - **`--path <subdir>`** — in-repository subdirectory of the manifest, for a
   monorepo package (direct repository installs only).
+- **`--app <stack app>`** — install one app of a stack instead of every
+  non-optional one (direct repository installs only; a registry stack app
+  is addressed as `<stack>/<app>` in the spec itself).
+- **`--force`** — install even though the host cannot currently cover the
+  package's declared requirements or runtime quota; skips the interactive
+  prompt.
 - **`--image`** — pull the prebuilt image when the manifest offers both
   `image` and `image-build`, skipping the interactive choice; conflicts with
   `--build`.
