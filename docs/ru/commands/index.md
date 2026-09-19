@@ -28,3 +28,4 @@
 | [💾 backup](/ru/commands/backup) | Создание, восстановление и управление бекапами |
 | [⚙️ config](/ru/commands/config) | Язык CLI, debug-логирование |
 | [🔁 autoupdate](/ru/commands/autoupdate) | Включение/выключение автообновлений |
+| [🐳 docker](/ru/commands/docker) | Все контейнеры хоста — и ASC-овские, и чужие |

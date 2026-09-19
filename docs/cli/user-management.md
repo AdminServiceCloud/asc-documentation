@@ -25,4 +25,4 @@ This feature is **SSH-key-only by design**: the daemon never handles a Linux pas
 
 ## 🔗 Related tasks
 
-DMN-099 in [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md) adds `UserService`; the `users` capability flag gates the platform's "Users" tab client-side.
+DMN-100 in [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md) adds `UserService`; the `users` capability flag gates the platform's "Users" tab client-side.

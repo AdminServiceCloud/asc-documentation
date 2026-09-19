@@ -58,6 +58,7 @@ const cliSidebarEn = [
       { text: "backup", link: "/commands/backup" },
       { text: "config", link: "/commands/config" },
       { text: "autoupdate", link: "/commands/autoupdate" },
+      { text: "docker", link: "/commands/docker" },
     ],
   },
 ]
@@ -119,6 +120,7 @@ const cliSidebarRu = [
       { text: "backup", link: "/ru/commands/backup" },
       { text: "config", link: "/ru/commands/config" },
       { text: "autoupdate", link: "/ru/commands/autoupdate" },
+      { text: "docker", link: "/ru/commands/docker" },
     ],
   },
 ]

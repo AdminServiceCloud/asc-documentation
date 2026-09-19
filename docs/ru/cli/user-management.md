@@ -25,4 +25,4 @@
 
 ## 🔗 Связанные задачи
 
-DMN-099 в [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md) добавляет `UserService`; флаг возможностей `users` включает вкладку «Users» на платформе.
+DMN-100 в [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md) добавляет `UserService`; флаг возможностей `users` включает вкладку «Users» на платформе.
