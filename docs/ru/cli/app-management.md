@@ -97,6 +97,22 @@ Engine API, как и весь драйвер, и обе доступны **то
 это как баг; для этого есть `asc app start|stop`. У чужого контейнера вообще нет
 модели прав — это отдельная задача со своей capability.
 
+### 🧹 Инвентарь хоста и очистка (DMN-104/DMN-105)
+
+`asc docker images|volumes|networks|df` расширяют инвентарь хоста за пределы
+контейнеров: все образы, именованные тома и сети, которые знает Engine, плюс
+сводка `df` по образцу `docker system df`. `asc docker prune
+images|volumes|build-cache [--dry-run] [--dangling]` удаляет неиспользуемое —
+и никогда не трогает то, что всё ещё нужно установленному приложению.
+
+- **Образ или том, который объявляет установленное приложение, защищён —
+  запущено оно или нет.** Защищённое множество считается по манифесту и
+  настройкам каждого приложения, а не по лейблам или соглашению об именах.
+- **Удаление — поштучное, никогда не через собственный массовый
+  `/images/prune` или `/volumes/prune` Engine.**
+- **Сети — только инвентарь, `asc docker prune networks` не существует.**
+- **`asc docker df` не дешёвый и никогда не опрашивается.**
+
 ### ⚙️ Ядро
 
 - **Драйверы**: трейт `AppDriver { start, stop, restart, state, logs, remove }` с реализациями `DockerDriver` (через **Docker Engine API поверх unix-сокета** — не через `docker` CLI; путь сокета настраивается — `[docker] socket`, по умолчанию `/var/run/docker.sock`), `SystemdDriver` (юниты `asc-app-<id>.service`), `ProcessDriver` (supervised PID: pid-файл и лог-файл в каталоге приложения). Установка приложения (создание контейнера/юнита из манифеста) — зона пакетного менеджера (DMN-003).
@@ -104,8 +120,8 @@ Engine API, как и весь драйвер, и обе доступны **то
 - **Индекс приложений**: `meta.json` — источник правды; в MVP индекс строится сканированием `/asc/apps/*/meta.json` при обращении, при старте демон сверяет желаемое состояние (`desired_state`) с реальностью (контейнеры, юниты, процессы) и дозапускает упавшее. Локальная БД (SQLite) появится, когда добавится состояние сверх meta.json (метрики, история операций).
 - **Логи**: единый интерфейс — docker logs / journald / файл; стрим наружу через [🖥️ console](console.md).
 - **Cluster-мод (пост-MVP)**: несколько *узлов*, работающих вместе как платформа. Несколько инстансов одного приложения на одном узле уже работают (DMN-033/034, выше).
-- **CLI-команды MVP**: `asc status`, `asc stats`, `asc ports`, `asc stacks`, `asc app list|install|remove|start|stop|restart|logs|info|disk|ports|clone|settings` (+ алиасы `asc ls`/`asc ps` для списка и `asc ls ports|disk|stats` для видов портов/диска/статистики), `asc service` (управление самим демоном), `asc docker ps|stats` (контейнеры хоста).
+- **CLI-команды MVP**: `asc status`, `asc stats`, `asc ports`, `asc stacks`, `asc app list|install|remove|start|stop|restart|logs|info|disk|ports|clone|settings` (+ алиасы `asc ls`/`asc ps` для списка и `asc ls ports|disk|stats` для видов портов/диска/статистики), `asc service` (управление самим демоном), `asc docker ps|stats|images|volumes|networks|df|prune` (контейнеры, образы, тома, сети хоста и очистка).
 
 ## 🔗 Связанные задачи
 
-DMN-002, DMN-004, DMN-019, DMN-044, DMN-051, FE-005 в [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).
+DMN-002, DMN-004, DMN-019, DMN-044, DMN-051, DMN-104, DMN-105, FE-005, NODE-039, BE-040, FE-110 в [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).
