@@ -69,22 +69,24 @@ recognizes keeps working against a newer daemon.
 | `GET /v1/apps/{id}/disk` | `AppService.GetAppDisk` | Disk usage: image, repository, data, custom volumes |
 | `GET /v1/apps/{id}/ports` | — (REST only for now) | The ports the app publishes (DMN-049), resolved from its settings — a stopped app reports what it will bind next start |
 | `POST /v1/apps/{id}/upgrade {"version"?}` | — (REST only for now) | Upgrade the app (DMN-003); without `version` — to the repository's newest tag, or the branch it tracks for a direct repository install (DMN-053). The app must be stopped. Answers `{"id", "up_to_date", "from", "to"}` |
+| `POST /v1/apps/{id}/clone {"name"?}` | `AppService.CloneApp`/`CloneAppStream` (DMN-113) | Full copy of the app under a new `<id>-N`, always stopped; the stream sibling reports the directory copy as progress lines. REST exposes only the unary form — the platform's clone dialog uses the gRPC stream, same split as install/upgrade. Answers `{"id", "name", "copied_bytes"}` |
 | `GET /v1/disk` | — (REST only for now) | Every visible app's footprint, largest first, plus the capacity of the filesystem holding the app store (DMN-053) |
 | `GET /v1/ports` | — (REST only for now) | Every visible app and the ports it publishes |
-| `GET /v1/stats` | — (REST only for now) | Resource consumption per app (CPU %, memory, disk, network); costs the ~500 ms sampling interval per call |
+| `GET /v1/stats?ids=a,b` | `AppService.GetAppStats` (DMN-080) | Resource consumption per app (CPU %, memory, disk, network); `ids` filters the set **before** sampling, not after — empty means every visible app. Costs the ~500 ms sampling interval per call |
+| — (gRPC only) | `AppService.StreamAppStats` (DMN-081) | The same samples as a push stream; `min_interval_secs` is the minimum gap between frames (the server floors it at ≥1s) |
 | `POST /v1/apps/{id}/start\|stop\|restart` | `AppService.Start/Stop/RestartApp` | Lifecycle |
-| `GET /v1/apps/{id}/logs?tail=N` | `AppService.GetAppLogs` | Log tail |
+| `GET /v1/apps/{id}/logs?tail=N&timestamps=bool` | `AppService.GetAppLogs` | Log tail, optionally with an ISO timestamp on each line (DMN-088) |
 | `GET /v1/apps/{id}/settings` | — (REST only for now) | The app's settings schema (`asc.settings.yaml`, `null` when the package defines none) and the values chosen so far, defaults merged in |
 | `PUT /v1/apps/{id}/settings {"values": {...}}` | — (REST only for now) | Replace the chosen values; keys the app's own schema does not define are rejected. A gRPC counterpart waits on modelling the settings schema in the proto contracts |
 | `DELETE /v1/apps/{id}` | `AppService.RemoveApp` | Removal including data |
 | `POST /v1/apps/{id}/console-token` | `AppService.IssueConsoleToken` | Temporary console token |
 | `GET /v1/docker/containers?all=&size=` | `DockerService.ListContainers` (DMN-102) | Every container on the host, ASC-managed or not, with the owning application resolved where there is one. `size=1` makes the Engine walk each container's writable layer, so it is off by default. **Root context only** |
 | `GET /v1/docker/stats?ids=a,b` | `DockerService.ListContainerStats` (DMN-112) | Live CPU/memory/network/block usage of containers; `ids` filters **before** the sampling window, empty means every running container. Costs one ~500 ms window for the whole set. **Root context only** |
-| `GET /v1/docker/images` | `DockerService.ListImages` (DMN-104) | Every image on the host, with `ascProtected`/`protectedReason` set when an installed app still runs it. **Root context only** |
+| `GET /v1/docker/images` | `DockerService.ListImages` (DMN-104) | Every image on the host, ASC-managed or not, with `ascProtected`/`protectedReason` set when an installed app still runs it. **Root context only** |
 | `GET /v1/docker/volumes` | `DockerService.ListVolumes` (DMN-104) | Every named volume, with `ascProtected`/`protectedReason` set when an installed app's settings declare it. **Root context only** |
-| `GET /v1/docker/networks` | `DockerService.ListNetworks` (DMN-104) | Every network, inventory-only. **Root context only** |
-| `GET /v1/docker/disk-usage` | `DockerService.GetDockerDiskUsage` (DMN-104) | `docker system df`'s four categories: counts and bytes. **Root context only** |
-| `POST /v1/docker/prune` | `DockerService.PruneDocker` (DMN-105) | Body `{target, dryRun, danglingOnly}`. Removes unused images/volumes/build cache one at a time; never anything an installed app still needs. **Root context only** |
+| `GET /v1/docker/networks` | `DockerService.ListNetworks` (DMN-104) | Every network, inventory-only — see `PruneDocker` below for why there is no delete route. **Root context only** |
+| `GET /v1/docker/disk-usage` | `DockerService.GetDockerDiskUsage` (DMN-104) | `docker system df`'s four categories (images/containers/volumes/build cache): counts and bytes. Expensive — call on demand, never on a poll. **Root context only** |
+| `POST /v1/docker/prune` | `DockerService.PruneDocker` (DMN-105) | Body `{target: "images"\|"volumes"\|"build_cache", dryRun, danglingOnly}`. Removes unused items one at a time; anything an installed app still needs comes back in `skipped` with why, `dryRun` computes the same plan without deleting. **Root context only** |
 | `GET /v1/metrics` | `MonitorService.GetSystemMetrics` | Current system metrics (503 until the first sample) |
 | `GET /v1/metrics/history?limit=N` | `MonitorService.GetMetricsHistory` | Metrics history from the ring buffer, oldest → newest |
 | `GET /v1/ports/listening` | `MonitorService.ListListeningPorts` (DMN-103) | Real host listening ports parsed from `/proc/net/*`, merged with Docker/app attribution — distinct from `GET /v1/ports` above, which reports what apps *declare* |
@@ -94,6 +96,14 @@ recognizes keeps working against a newer daemon.
 | `DELETE /v1/token/access` | `TokenService.RevokeAccessTokens` | Kill every live access token, `{"revoked": n}` (primary only) |
 | `POST /v1/token/rotate {"grace_secs"?}` | `TokenService.RotatePrimaryToken` | Replace the primary, revoking all access tokens; returns the new token (primary only) |
 | `POST /v1/token/rotate/commit` | `TokenService.CommitPrimaryTokenRotation` | Confirm the new primary is stored and close the grace window; refused when presented with the token it replaced |
+| `GET /v1/files?path=&hidden=` | `FileService.ListDirectory` | List a directory from `/`; details — [📁 files](/cli/files) |
+| `GET /v1/files/stat?path=` | `FileService.StatPath` | Metadata for one path |
+| `POST /v1/files/directory` | `FileService.CreateDirectory` | Create a directory |
+| `POST /v1/files/move` · `/copy` · `/delete` · `/archive` | `FileService.MovePath` / `CopyPath` / `DeletePaths` / `CreateArchive` | Move, copy, delete, archive |
+| `GET /v1/files/content?path=&offset=` | `FileService.ReadFile` (stream) | Download a file |
+| `PUT /v1/files/content?path=&name=&overwrite=` | `FileService.WriteFile` (stream) | Upload a file |
+| `POST /v1/files/attributes` | `FileService.SetPathAttributes` | Mode and/or owner/group by name |
+| `GET /v1/files/identities` | `FileService.ListSystemIdentities` | The machine's local users and groups |
 
 ### 📜 Code generation
 
@@ -102,4 +112,4 @@ recognizes keeps working against a newer daemon.
 
 ## 🔗 Related tasks
 
-DMN-005, DMN-007, DMN-042, DMN-043, DMN-053, DMN-065, DMN-066 in [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).
+DMN-005, DMN-007, DMN-042, DMN-043, DMN-053, DMN-065, DMN-066, DMN-070 in [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).

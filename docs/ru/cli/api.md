@@ -69,22 +69,24 @@ API-сервер демона: один и тот же axum-роутер — gRP
 | `GET /v1/apps/{id}/disk` | `AppService.GetAppDisk` | Дисковое пространство: образ, репозиторий, данные, кастомные тома |
 | `GET /v1/apps/{id}/ports` | — (пока только REST) | Порты, которые публикует приложение (DMN-049), из его настроек — остановленное приложение показывает, что займёт при следующем старте |
 | `POST /v1/apps/{id}/upgrade {"version"?}` | — (пока только REST) | Обновление приложения (DMN-003); без `version` — до самого свежего тега репозитория или до ветки, которую отслеживает приложение, установленное по ссылке (DMN-053). Приложение должно быть остановлено. Ответ — `{"id", "up_to_date", "from", "to"}` |
+| `POST /v1/apps/{id}/clone {"name"?}` | `AppService.CloneApp`/`CloneAppStream` (DMN-113) | Полная копия приложения под новым `<id>-N`, всегда остановленная; потоковый вариант отдаёт копирование каталога строками прогресса. REST отдаёт только нестриминговую форму — диалог клонирования на платформе использует gRPC-поток, тот же приём, что у install/upgrade. Ответ — `{"id", "name", "copied_bytes"}` |
 | `GET /v1/disk` | — (пока только REST) | Сколько занимает каждое видимое приложение, по убыванию, и ёмкость файловой системы, где лежит хранилище приложений (DMN-053) |
 | `GET /v1/ports` | — (пока только REST) | Все видимые приложения и порты, которые они публикуют |
-| `GET /v1/stats` | — (пока только REST) | Потребление ресурсов по приложениям (CPU %, память, диск, сеть); каждый вызов стоит ~500 мс интервала сэмплирования |
+| `GET /v1/stats?ids=a,b` | `AppService.GetAppStats` (DMN-080) | Потребление ресурсов по приложениям (CPU %, память, диск, сеть); `ids` фильтрует список **до** сэмплирования, а не после; пусто — все видимые приложения. Каждый вызов стоит ~500 мс интервала сэмплирования |
+| — (только gRPC) | `AppService.StreamAppStats` (DMN-081) | Те же сэмплы push-стримом; `min_interval_secs` — минимальный интервал между кадрами (сервер поднимает до ≥1с) |
 | `POST /v1/apps/{id}/start\|stop\|restart` | `AppService.Start/Stop/RestartApp` | Жизненный цикл |
-| `GET /v1/apps/{id}/logs?tail=N` | `AppService.GetAppLogs` | Хвост логов |
+| `GET /v1/apps/{id}/logs?tail=N&timestamps=bool` | `AppService.GetAppLogs` | Хвост логов, опционально с ISO-меткой на каждой строке (DMN-088) |
 | `GET /v1/apps/{id}/settings` | — (пока только REST) | Схема настроек приложения (`asc.settings.yaml`, `null` если пакет их не объявляет) и выбранные значения с подмешанными значениями по умолчанию |
 | `PUT /v1/apps/{id}/settings {"values": {...}}` | — (пока только REST) | Заменить выбранные значения; ключи, которых нет в схеме самого приложения, отклоняются. gRPC-аналог ждёт моделирования схемы настроек в proto-контрактах |
 | `DELETE /v1/apps/{id}` | `AppService.RemoveApp` | Удаление с данными |
 | `POST /v1/apps/{id}/console-token` | `AppService.IssueConsoleToken` | Временный токен консоли |
 | `GET /v1/docker/containers?all=&size=` | `DockerService.ListContainers` (DMN-102) | Все контейнеры хоста — и ASC-овские, и чужие, — с определённым приложением-владельцем там, где оно есть. `size=1` заставляет Engine обойти writable-слой каждого контейнера, поэтому по умолчанию выключено. **Только root-контекст** |
 | `GET /v1/docker/stats?ids=a,b` | `DockerService.ListContainerStats` (DMN-112) | Живые CPU/память/сеть/диск контейнеров; `ids` фильтрует **до** окна сэмплирования, пусто — все запущенные. Стоит одного окна ~500 мс на весь набор. **Только root-контекст** |
-| `GET /v1/docker/images` | `DockerService.ListImages` (DMN-104) | Все образы хоста, с `ascProtected`/`protectedReason`, когда образ всё ещё запускает установленное приложение. **Только root-контекст** |
+| `GET /v1/docker/images` | `DockerService.ListImages` (DMN-104) | Все образы хоста — и ASC-овские, и чужие, — с `ascProtected`/`protectedReason`, когда образ всё ещё запускает установленное приложение. **Только root-контекст** |
 | `GET /v1/docker/volumes` | `DockerService.ListVolumes` (DMN-104) | Все именованные тома, с `ascProtected`/`protectedReason`, когда том объявлен настройками установленного приложения. **Только root-контекст** |
-| `GET /v1/docker/networks` | `DockerService.ListNetworks` (DMN-104) | Все сети, только инвентарь. **Только root-контекст** |
-| `GET /v1/docker/disk-usage` | `DockerService.GetDockerDiskUsage` (DMN-104) | Четыре категории `docker system df`: счётчики и байты. **Только root-контекст** |
-| `POST /v1/docker/prune` | `DockerService.PruneDocker` (DMN-105) | Тело `{target, dryRun, danglingOnly}`. Удаляет неиспользуемые образы/тома/build cache поштучно; никогда то, что нужно установленному приложению. **Только root-контекст** |
+| `GET /v1/docker/networks` | `DockerService.ListNetworks` (DMN-104) | Все сети, только инвентарь — почему нет маршрута удаления, см. `PruneDocker` ниже. **Только root-контекст** |
+| `GET /v1/docker/disk-usage` | `DockerService.GetDockerDiskUsage` (DMN-104) | Четыре категории `docker system df` (образы/контейнеры/тома/build cache): счётчики и байты. Дорогой вызов — только по требованию, никогда по таймеру. **Только root-контекст** |
+| `POST /v1/docker/prune` | `DockerService.PruneDocker` (DMN-105) | Тело `{target: "images"\|"volumes"\|"build_cache", dryRun, danglingOnly}`. Удаляет неиспользуемое поштучно; то, что всё ещё нужно установленному приложению, возвращается в `skipped` с причиной, `dryRun` считает тот же план без удаления. **Только root-контекст** |
 | `GET /v1/metrics` | `MonitorService.GetSystemMetrics` | Текущие системные метрики (503, пока нет первого сэмпла) |
 | `GET /v1/metrics/history?limit=N` | `MonitorService.GetMetricsHistory` | История метрик из кольцевого буфера, старые → новые |
 | `GET /v1/ports/listening` | `MonitorService.ListListeningPorts` (DMN-103) | Реально занятые порты хоста из `/proc/net/*`, слитые с атрибуцией по Docker/приложениям — в отличие от `GET /v1/ports` выше, который отдаёт то, что приложения *объявляют* |
@@ -94,6 +96,14 @@ API-сервер демона: один и тот же axum-роутер — gRP
 | `DELETE /v1/token/access` | `TokenService.RevokeAccessTokens` | Гасит все живые временные токены, `{"revoked": n}` (только по основному) |
 | `POST /v1/token/rotate {"grace_secs"?}` | `TokenService.RotatePrimaryToken` | Замена основного токена с отзывом всех временных; возвращает новый токен (только по основному) |
 | `POST /v1/token/rotate/commit` | `TokenService.CommitPrimaryTokenRotation` | Подтверждение, что новый основной токен сохранён, и закрытие окна; отклоняется, если предъявлен заменённый токен |
+| `GET /v1/files?path=&hidden=` | `FileService.ListDirectory` | Список каталога от `/`; подробности — [📁 files](/ru/cli/files) |
+| `GET /v1/files/stat?path=` | `FileService.StatPath` | Метаданные одного пути |
+| `POST /v1/files/directory` | `FileService.CreateDirectory` | Создание каталога |
+| `POST /v1/files/move` · `/copy` · `/delete` · `/archive` | `FileService.MovePath` / `CopyPath` / `DeletePaths` / `CreateArchive` | Перемещение, копирование, удаление, архивирование |
+| `GET /v1/files/content?path=&offset=` | `FileService.ReadFile` (стрим) | Скачивание файла |
+| `PUT /v1/files/content?path=&name=&overwrite=` | `FileService.WriteFile` (стрим) | Загрузка файла |
+| `POST /v1/files/attributes` | `FileService.SetPathAttributes` | Режим и/или владелец/группа по имени |
+| `GET /v1/files/identities` | `FileService.ListSystemIdentities` | Локальные пользователи и группы |
 
 ### 📜 Кодогенерация
 
@@ -102,4 +112,4 @@ API-сервер демона: один и тот же axum-роутер — gRP
 
 ## 🔗 Связанные задачи
 
-DMN-005, DMN-007, DMN-042, DMN-043, DMN-053, DMN-065, DMN-066 в [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).
+DMN-005, DMN-007, DMN-042, DMN-043, DMN-053, DMN-065, DMN-066, DMN-070 в [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).

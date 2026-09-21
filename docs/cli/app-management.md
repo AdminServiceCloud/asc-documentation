@@ -8,15 +8,15 @@ The core of the daemon: a single interface for managing applications of three ki
 
 - `asc app install helloworld` — install from a registry (Docker or native — the manifest decides).
 - `asc app start|stop|restart|status|logs <name>` — lifecycle management. `start` attaches to the app's console right away (Docker apps, interactive terminal — like `docker run` without `-d`); `asc app start -d <name>` starts detached, without attaching. When the host is short on the resources the manifest `requirements` declare, `start` warns with the figures and asks to continue at the user's own risk (DMN-029).
-- **Custom names** (DMN-024): `asc install` asks for an app name (Enter keeps the default; non-interactively — `--name`). `asc app list` shows both the original ID and the NAME, and every command accepts either one: `asc app start "My Server"` = `asc app start cs2-server`. When an id and a name collide, the id wins; an ambiguous name (several apps named alike) is an error suggesting the id. Both are matched **case-insensitively** (DMN-059) — ids are canonically lowercase (`HOMEBAR` installs as `homebar`, see [📦 package-manager](package-manager.md)), so `asc app start HOMEBAR` reaches it; an exact spelling still wins over a case-folded one, which keeps two names differing only in case addressable.
+- **Custom names** (DMN-024): `asc install` asks for an app name (Enter keeps the default; non-interactively — `--name`). `asc app list` shows both the original ID and the NAME, and every command accepts either one: `asc app start "My Server"` = `asc app start cs2-server`. When an id and a name collide, the id wins; an ambiguous name (several apps named alike) is an error suggesting the id. Both are matched **case-insensitively** (DMN-059) — ids are canonically lowercase (`HOMEBAR` installs as `homebar`, see [📦 package-manager](/cli/package-manager)), so `asc app start HOMEBAR` reaches it; an exact spelling still wins over a case-folded one, which keeps two names differing only in case addressable.
 - **Multiple instances of one app** (DMN-033): installing an already-installed package no longer errors out — it becomes a new instance `<package>-2`, `<package>-3`, … (also its default name), so `asc install nginx` twice gives two independent `nginx`/`nginx-2` apps. Installing a whole stack again names its new instances the same way; `--name <prefix>` on a whole-stack install prefixes every member app instead (DMN-034), since a stack has no entity of its own.
 - **`asc app disk <name>`** (DMN-035): disk usage — a quota bar when `quota.max_disk` is set, then a breakdown by Docker image, repository checkout, private data and custom volumes (Docker named volumes are marked shared and excluded from the app-directory total).
-- **`asc app clone <name> [--name <clone-name>]`** (DMN-019): a full copy of an app instance — repository, config and data — under a new id (the same `<id>-N` numbering a repeat `asc install` uses, DMN-033), with a live byte-progress bar over the copy on a terminal. The runtime itself is never copied (a Docker container/systemd unit/process cannot be), only recreated from the copied manifest and settings, exactly like a fresh install. The clone always starts stopped. Cloning across nodes (moving the copy to a different server via the platform) is a separate, later increment — see [🧬 app-cloning](https://github.com/AdminServiceCloud/asc-platform/blob/main/docs/features/app-cloning.md).
+- **`asc app clone <name> [--name <clone-name>]`** (DMN-019): a full copy of an app instance — repository, config and data — under a new id (the same `<id>-N` numbering a repeat `asc install` uses, DMN-033), with a live byte-progress bar over the copy on a terminal. The runtime itself is never copied (a Docker container/systemd unit/process cannot be), only recreated from the copied manifest and settings, exactly like a fresh install. The clone always starts stopped. **`AppService.CloneApp`/`CloneAppStream`** (DMN-113) expose the same operation over gRPC/REST (`POST /v1/apps/{id}/clone`) for the platform's "Clone" button, the streamed sibling reporting the copy's progress as text lines (one per whole percentage point) the same way `InstallAppStream`/`UpgradeAppStream` do. Cloning to a *different* node (NODE-045) reuses this locally, on the target, as the "install" phase of a cross-node move — see [🧬 app-cloning](https://github.com/AdminServiceCloud/asc-platform/blob/main/docs/features/app-cloning.md). That move needs to re-derive an install spec from the app's own recorded origin the way `asc app upgrade` already does internally (`meta.source`/`meta.package`/`meta.repo_path`/`meta.branch`), so `App` (`ListApps`/`GetApp`) now also carries `package`, `repo_path` and `branch` alongside the existing `source`/`version`/`commit` — all optional, all absent on an app installed before DMN-113.
 - `asc app list` — a user sees **only their own** applications; `sudo asc app list` — the applications of all users. Short aliases (DMN-025): `asc ls` and `asc ps` — same output and same permissions.
-- **`asc ports [<name>]`** / **`asc app ports [<name>]`** (DMN-049): the published host==container ports of an app with their transport (`27015/tcp`, `27015/udp`, or `27015/tcp+udp` when both share the port), resolved from the app's `type: ports` settings — so a **stopped** app still reports the ports it will bind on the next start. Without a name: a table of every visible app and its ports (root sees all users' apps). **`AppService.ListAppPorts`** (DMN-079) is the same list over gRPC, for the platform: docker apps report their ports, every other kind returns an empty list.
-- `asc stats [--live] [--sort cpu|mem]` — CPU, memory, disk and network consumption per application (like `docker stats`, see [📊 monitoring](monitoring.md)).
+- **`asc ports [<name>]`** / **`asc app ports [<name>]`** (DMN-049): the published ports of an app with their transport (`27015/tcp`, `27015/udp`, or `27015/tcp+udp` when both share the port), resolved from the app's `type: ports` settings — so a **stopped** app still reports the ports it will bind on the next start. A package that fixes its container side (`container:`, DMN-052) reads as `8080->3000/tcp`: the host port first, then the container port behind it. Without a name: a table of every visible app and its ports (root sees all users' apps). **`AppService.ListAppPorts`** (DMN-079) is the same list over gRPC, for the platform: docker apps report their ports, every other kind returns an empty list.
+- `asc stats [--live] [--sort cpu|mem]` — CPU, memory, disk and network consumption per application (like `docker stats`, see [📊 monitoring](/cli/monitoring)).
 - **List subcommands** (DMN-049): `asc ls ports`, `asc ls disk` and `asc ls stats` switch the same app list to the ports, disk-usage or live-stats view — mirrors of `asc ports` / `asc disk` / `asc stats`.
-- **`asc stacks`** (DMN-051): installed apps grouped by the stack (`asc.stack.yaml` package) they came from, rendered as a tree — the stack name annotated with how many of its apps are running (`[running/total]`), then its member apps as `├──`/`└──` branches (id, name, kind, state, version, uuid — same columns as `asc ls`), root sees all users' apps. The stack is read from `meta.package` (`"<stack>/<app>"`, recorded at install — see [📦 package-manager](package-manager.md)); an app installed on its own has no `/` in `package` and never appears here.
+- **`asc stacks`** (DMN-051): installed apps grouped by the stack (`asc.stack.yaml` package) they came from, rendered as a tree — the stack name annotated with how many of its apps are running (`[running/total]`), then its member apps as `├──`/`└──` branches (id, name, kind, state, version, uuid — same columns as `asc ls`), root sees all users' apps. The stack is read from `meta.package` (`"<stack>/<app>"`, recorded at install — see [📦 package-manager](/cli/package-manager)); an app installed on its own has no `/` in `package` and never appears here.
 - The platform performs the same operations through the daemon API.
 - After a server reboot the daemon restores the application states (running/stopped).
 
@@ -28,7 +28,8 @@ The core of the daemon: a single interface for managing applications of three ki
 - A regular user sees and manages **only their own application group**.
 - Via `sudo` (or as `root`) the applications of **all users** are visible and accessible — the output is grouped by owner.
 - The daemon API applies the same rule: the request context determines the visible group.
-- **With the system daemon running** (DMN-042), the lifecycle commands (`ls`/`status`/`install`/`app start|stop|restart|logs|remove|info`) go through its unix socket `/run/asc/asc.sock`: the daemon reads the caller's uid from the kernel (SO_PEERCRED) and enforces this rule on the shared system store — a regular user manages their apps in `/asc/apps` **without sudo and without the docker group**, and `asc ls` / `sudo asc ls` finally agree on what is installed. Details — [📡 api](api.md).
+- **With the system daemon running** (DMN-042), the lifecycle commands (`ls`/`status`/`install`/`app start|stop|restart|logs|remove|info`) go through its unix socket `/run/asc/asc.sock`: the daemon reads the caller's uid from the kernel (SO_PEERCRED) and enforces this rule on the shared system store — a regular user manages their apps in `/asc/apps` **without sudo and without the docker group**, and `asc ls` / `sudo asc ls` finally agree on what is installed. Details — [📡 api](/cli/api).
+- **The reporting commands take the same route** (DMN-053): `asc disk`, `asc ports`, `asc stats`, `asc stacks` and `asc upgrade` go through the socket too. They used to read the caller's *own* app tree in-process, so a user whose apps live in the system tree saw them in `asc ls` and "No apps installed" in every report next to it — and `asc app upgrade <id>` answered "app not found" for an app that was plainly there. What is left in-process is `asc app clone` and `asc backup`, which still need the system tree directly (root or no daemon).
 
 ### 📂 Application storage: /asc/apps/
 
@@ -39,10 +40,10 @@ Every application lives in a directory named after its ID:
 ├── config/        # ⚙️ application settings (see asc.settings.yaml in package-manager.md)
 ├── repository/    # 📦 the application's cloned repository (versions = git tags)
 ├── data/          # 💾 volumes — if the application runs in Docker
-└── meta.json      # 📇 application info: id, uuid, name, custom name, owner, version (tag), source, state
+└── meta.json      # 📇 application info: id, uuid, name, custom name, owner, version (tag), source, tracked branch, state
 ```
 
-- **Installation = cloning the repository** of the package into `repository/`; switching versions = checking out the desired git tag (details — [📦 package-manager](package-manager.md)).
+- **Installation = cloning the repository** of the package into `repository/`; switching versions = checking out the desired git tag (details — [📦 package-manager](/cli/package-manager)).
 - `meta.json` is the source of truth for rebuilding the index after a crash/reboot.
 - **Path scoping by user**: `/asc/apps/` (with `/etc/asc/config.toml` and `/var/lib/asc`) is the tree of the **root** installation — the system daemon and `sudo asc`. Running `asc` as a regular user **without a running system daemon** works against a private tree under `~/.asc/` instead: `~/.asc/apps`, `~/.asc/data`, `~/.asc/config.toml` — so the user edits their apps' settings and config without sudo. With the daemon present, the lifecycle commands operate on the shared system tree through the daemon socket instead (DMN-042, see above). The root-managed `[policy]` section is still read from the system config and cannot be overridden per user.
 
@@ -110,24 +111,40 @@ never anything an installed application still needs.
   stopped.** The protected set is computed from each app's own manifest and
   settings (the image it currently resolves to via `runtime.image`/
   `runtime.image-build`, and every named volume a `type: volumes` setting
-  declares), never from labels or naming conventions.
+  declares), never from labels or naming conventions. `asc docker images`/
+  `volumes` mark a protected row and say which app is holding it.
 - **Removal is one item at a time, never the Engine's own bulk `/images/prune`
-  or `/volumes/prune`.** Per-item removal makes the protected-set check exact
-  and makes `--dry-run` report precisely what would happen, not an estimate.
+  or `/volumes/prune`.** A container ASC did not create carries no ownership
+  label, so a filtered bulk prune would either miss nothing (no filter) and
+  risk removing something in active use through a race, or filter on a label
+  this daemon only started adding with DMN-105 and therefore leaves every
+  pre-existing container's image unprotected. Per-item removal makes the
+  protected-set check exact and makes `--dry-run` report precisely what would
+  happen, not an estimate.
 - **Networks are inventory-only — there is no `asc docker prune networks`.**
-  The Engine's own network prune removes any network with no *running*
-  container attached, including a stopped Compose stack's network.
-- **`asc docker df` is not cheap and is never polled.**
+  ASC never creates or deletes networks of its own, and the Engine's own
+  network prune removes any network with no *running* container attached,
+  including a stopped Compose stack's network — silently breaking its next
+  `up`. Showing networks without a delete path avoids that trap entirely.
+- **`asc docker df` is not cheap and is never polled.** Like `docker system
+  df`, answering it makes the Engine walk every image layer and volume; call
+  it when opening a cleanup view, not on a timer.
+- **Container labels** (`asc.managed`, `asc.app.id`, `asc.app.uuid`) are
+  written on every container ASC creates from DMN-105 onward, for a future
+  caller that wants to recognize an ASC-managed container without matching by
+  name. They are informational only: the settings-drift check
+  (`container_applied`) never reads labels back, so adding them cannot trigger
+  an unwanted recreate of an already-running container.
 
 ### ⚙️ Core
 
 - **Drivers**: the `AppDriver { start, stop, restart, state, logs, remove }` trait with implementations `DockerDriver` (via the **Docker Engine API over the unix socket** — not the `docker` CLI; the socket path is configurable — `[docker] socket`, default `/var/run/docker.sock`), `SystemdDriver` (units `asc-app-<id>.service`), `ProcessDriver` (supervised PID: a pid file and a log file in the application directory). Application installation (creating a container/unit from the manifest) is the package manager's job (DMN-003).
 - **Docker Engine API**: the daemon talks to Docker through the Engine API (the `bollard` client, unix socket), not the CLI — this works for rootless installations and non-standard socket locations (just set the path in the config). Control operations (start/stop/inspect/create/remove) are synchronous; log streaming and attach for the console are asynchronous over the same socket. Container creation pulls the image by itself when it is not on the host (a pull through the same Engine API); an Engine response with any HTTP status is not treated as Docker being unreachable — the user sees the Engine's own message.
 - **Application index**: `meta.json` is the source of truth; in the MVP the index is built by scanning `/asc/apps/*/meta.json` on demand; at startup the daemon compares the desired state (`desired_state`) with reality (containers, units, processes) and restarts anything that has fallen over. A local database (SQLite) will appear once there is state beyond meta.json (metrics, operation history).
-- **Logs**: a single interface — docker logs / journald / file; streaming out via [🖥️ console](console.md).
+- **Logs**: a single interface — docker logs / journald / file; streaming out via [🖥️ console](/cli/console).
 - **Cluster mode (post-MVP)**: multiple *nodes* running the platform together. Multiple instances of one application on a single node already work (DMN-033/034, above).
 - **MVP CLI commands**: `asc status`, `asc stats`, `asc ports`, `asc stacks`, `asc app list|install|remove|start|stop|restart|logs|info|disk|ports|clone|settings` (+ the `asc ls`/`asc ps` aliases for the list, and `asc ls ports|disk|stats` for the ports/disk/stats views), `asc service` (managing the daemon itself), `asc docker ps|stats|images|volumes|networks|df|prune` (host containers, images, volumes, networks and cleanup).
 
 ## 🔗 Related tasks
 
-DMN-002, DMN-004, DMN-019, DMN-044, DMN-051, DMN-104, DMN-105, FE-005, NODE-039, BE-040, FE-110 in [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).
+DMN-002, DMN-004, DMN-019, DMN-044, DMN-051, DMN-053, DMN-102, DMN-104, DMN-105, DMN-112, DMN-113, FE-005, FE-108, NODE-039, BE-040, FE-110, NODE-044, BE-008, FE-024 in [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).
