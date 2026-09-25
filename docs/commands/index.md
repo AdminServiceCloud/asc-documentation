@@ -25,6 +25,7 @@ guides and background (not just flags), see the [CLI overview](/cli/).
 | [🗂️ source](/commands/source) | Manage registry sources |
 | [🔑 auth](/commands/auth) | Manage git/registry credentials |
 | [💾 backup](/commands/backup) | Create, restore and manage backups |
+| [⏰ schedule](/commands/schedule) | Scheduled jobs: reboots, app lifecycle, backups, commands, HTTP checks |
 | [⚙️ config](/commands/config) | CLI language, debug logging |
 | [🔁 autoupdate](/commands/autoupdate) | Enable/disable auto-updates |
 | [🐳 docker](/commands/docker) | Every container on the host, ASC-managed or not |

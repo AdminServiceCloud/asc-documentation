@@ -26,6 +26,7 @@
 | [🗂️ source](/ru/commands/source) | Управление источниками реестров |
 | [🔑 auth](/ru/commands/auth) | Управление git/registry credential'ами |
 | [💾 backup](/ru/commands/backup) | Создание, восстановление и управление бекапами |
+| [⏰ schedule](/ru/commands/schedule) | Задачи по расписанию: перезапуски, приложения, бекапы, команды, HTTP-проверки |
 | [⚙️ config](/ru/commands/config) | Язык CLI, debug-логирование |
 | [🔁 autoupdate](/ru/commands/autoupdate) | Включение/выключение автообновлений |
 | [🐳 docker](/ru/commands/docker) | Все контейнеры хоста — и ASC-овские, и чужие |
