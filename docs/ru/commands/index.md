@@ -27,6 +27,7 @@
 | [🔑 auth](/ru/commands/auth) | Управление git/registry credential'ами |
 | [💾 backup](/ru/commands/backup) | Создание, восстановление и управление бекапами |
 | [⏰ schedule](/ru/commands/schedule) | Задачи по расписанию: перезапуски, приложения, бекапы, команды, HTTP-проверки |
+| [🌐 web](/ru/commands/web) | Веб-сервер ноды: nginx, сайты, Let's Encrypt |
 | [⚙️ config](/ru/commands/config) | Язык CLI, debug-логирование |
 | [🔁 autoupdate](/ru/commands/autoupdate) | Включение/выключение автообновлений |
 | [🐳 docker](/ru/commands/docker) | Все контейнеры хоста — и ASC-овские, и чужие |

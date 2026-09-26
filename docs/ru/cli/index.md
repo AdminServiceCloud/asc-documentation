@@ -27,6 +27,7 @@ Open source CLI-утилита и демон на Rust, устанавливае
 | 📁 SFTP-сервер по приложению | [sftp](sftp.md) |
 | 🖥️ WebSocket-консоль приложений | [console](console.md) |
 | ⏰ Планировщик задач | [scheduler](scheduler.md) |
+| 🌐 Веб-сервер: nginx, сайты, Let's Encrypt, реальные IP за Cloudflare | [webserver](webserver.md) |
 | 🔄 Утилита обновлений asc-updater | [updater](updater.md) |
 
 Ищете флаги и синтаксис конкретной команды? Смотрите
@@ -48,7 +49,7 @@ Community-файлы: [🛡️ SECURITY.md](https://github.com/AdminServiceCloud
 │   │   ├── apps/     # драйверы: docker, systemd, process
 │   │   ├── pkg/      # пакетный менеджер + реестры
 │   │   ├── mcp/      # MCP-сервер
-│   │   ├── backup/ monitor/ sftp/ console/ scheduler/
+│   │   ├── backup/ monitor/ sftp/ console/ scheduler/ webserver/
 │   │   ├── i18n/     # система переводов вывода команд (EN/RU)
 │   │   └── config/   # /etc/asc/config.toml
 │   └── updater/      # 🔄 asc-updater — отдельный бинарник обновлений (см. updater.md)

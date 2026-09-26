@@ -41,6 +41,7 @@ hero:
     <ArticleCard icon="👤" title="User management" details="Local Linux accounts, groups and SSH keys." link="/cli/user-management" />
     <ArticleCard icon="🖥️" title="Console" details="WebSocket application console and live logs." link="/cli/console" />
     <ArticleCard icon="⏰" title="Scheduler" details="Task scheduler for recurring jobs." link="/cli/scheduler" />
+    <ArticleCard icon="🌐" title="Web server" details="nginx, apps on domains, Let's Encrypt, Cloudflare real IP." link="/cli/webserver" />
     <ArticleCard icon="🔄" title="Updater" details="asc-updater — auto-updates, channels, rollback." link="/cli/updater" />
     <ArticleCard icon="🔗" title="Platform" details="Connect a node with a registration token or asc connect." link="/cli/platform" />
   </div>

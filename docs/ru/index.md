@@ -41,6 +41,7 @@ hero:
     <ArticleCard icon="👤" title="Управление пользователями" details="Локальные Linux-аккаунты, группы и SSH-ключи." link="/ru/cli/user-management" />
     <ArticleCard icon="🖥️" title="Консоль" details="WebSocket-консоль приложений и live-логи." link="/ru/cli/console" />
     <ArticleCard icon="⏰" title="Планировщик" details="Планировщик повторяющихся задач." link="/ru/cli/scheduler" />
+    <ArticleCard icon="🌐" title="Веб-сервер" details="nginx, приложения на доменах, Let's Encrypt, реальные IP за Cloudflare." link="/ru/cli/webserver" />
     <ArticleCard icon="🔄" title="Обновления" details="asc-updater — автообновления, каналы, откат." link="/ru/cli/updater" />
     <ArticleCard icon="🔗" title="Платформа" details="Подключение ноды по токену регистрации или через asc connect." link="/ru/cli/platform" />
   </div>
