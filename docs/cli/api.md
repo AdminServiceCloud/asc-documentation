@@ -103,8 +103,19 @@ recognizes keeps working against a newer daemon.
 | `PUT /v1/schedules/managed/{managed_by}` | `ScheduleService.ReplaceManagedSchedules` | Body `{schedules}` — full replace of that owner's jobs; operator jobs are never touched |
 | `POST /v1/schedules/{id}/run` | `ScheduleService.RunSchedule` | Start a job now; answers `{started, run}` without waiting |
 | `GET /v1/schedules/{id}/runs?limit=` | `ScheduleService.ListScheduleRuns` | The job's runs, newest first (at most 50 kept) |
+| `GET /v1/webserver` | `WebServerService.GetWebServer` (DMN-122) | Web server state: mode, nginx version, running, settings, last apply error. Root only; capability `webserver` |
+| `POST /v1/webserver/install` | `WebServerService.InstallWebServerStream` | Body `{mode: "system"\|"docker"}` — install or adopt nginx; answers `{log, webserver}` |
+| `DELETE /v1/webserver?purge=` | `WebServerService.UninstallWebServer` | Remove the web server; `purge` also deletes configs, sites and certificates |
+| `PUT /v1/webserver/settings` | `WebServerService.UpdateWebServerSettings` | Node-wide nginx settings; saved only if `nginx -t` accepts them |
+| `POST /v1/webserver/test` / `POST /v1/webserver/reload` | `TestWebServerConfig` / `ReloadWebServer` | `{ok, output}` of `nginx -t` / full re-apply and reload |
+| `GET /v1/webserver/files` | `WebServerService.GetWebServerFiles` | The generated configuration files |
+| `GET /v1/webserver/sites` | `WebServerService.ListSites` (DMN-123) | Sites with status (`applied`/`error`/…) and TLS state; keys are never returned |
+| `PUT /v1/webserver/sites/{id}` / `DELETE …` | `UpsertSite` / `RemoveSite` | Add/replace or remove one site; platform sites go through `ReplaceSites(managed_by)` |
+| `POST /v1/webserver/sites/{id}/renew` | `WebServerService.RenewCertificate` (DMN-124) | Order a Let's Encrypt certificate now, ignoring backoff |
 | `GET /v1/metrics` | `MonitorService.GetSystemMetrics` | Current system metrics (503 until the first sample) |
 | `GET /v1/metrics/history?limit=N` | `MonitorService.GetMetricsHistory` | Metrics history from the ring buffer, oldest → newest |
+| `GET /v1/monitor/settings` | `MonitorService.GetMonitorSettings` | Sampler cadence (DMN-135): `interval_ms` while someone watches the stream, `idle_interval_ms` otherwise |
+| `PUT /v1/monitor/settings` | `MonitorService.SetMonitorSettings` | Change the cadence live and save it to `config.toml` (root; `interval_ms` 100–60000, `idle_interval_ms` 1000–300000 and not below `interval_ms`) |
 | `GET /v1/ports/listening` | `MonitorService.ListListeningPorts` (DMN-103) | Real host listening ports parsed from `/proc/net/*`, merged with Docker/app attribution — distinct from `GET /v1/ports` above, which reports what apps *declare* |
 | `GET /v1/processes` | `ProcessService.ListProcesses` (DMN-119) | Host processes (`ps`/`top`): CPU, RSS, user, state, start time, Docker container and owning app; `?kernelThreads=true` includes kernel threads |
 | `POST /v1/processes/{pid}/signal` | `ProcessService.SignalProcess` (DMN-119) | Body `{"signal": "term"\|"kill"\|"hup"\|"int"\|"stop"\|"cont"\|"usr1"\|"usr2", "expectedStartTicks"?: n}`; root only; 403 for pid 1/the daemon/kernel threads, 404 for a gone pid, 409 when the pid was reused |
