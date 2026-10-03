@@ -35,6 +35,7 @@ hero:
     <ArticleCard icon="📦" title="Package manager" details="asc.yaml manifests, registries, asc install." link="/cli/package-manager" />
     <ArticleCard icon="🤖" title="MCP server" details="Model Context Protocol server for AI agents." link="/cli/mcp-server" />
     <ArticleCard icon="📊" title="Monitoring" details="System and application monitoring." link="/cli/monitoring" />
+    <ArticleCard icon="🖥️" title="Hardware" details="Hardware inventory, temperature sensors, GPUs." link="/cli/hardware" />
     <ArticleCard icon="💾" title="Backups" details="Application backup, restore and rotation." link="/cli/backups" />
     <ArticleCard icon="📁" title="SFTP" details="Per-application SFTP server." link="/cli/sftp" />
     <ArticleCard icon="📁" title="Files" details="Node filesystem API: browse, transfer, archive." link="/cli/files" />

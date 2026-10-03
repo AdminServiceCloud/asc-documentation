@@ -23,6 +23,7 @@ Open source CLI-утилита и демон на Rust, устанавливае
 | 📦 Пакетный менеджер (`asc.yaml`, реестры, `asc install`) | [package-manager](package-manager.md) |
 | 🤖 MCP-сервер для AI | [mcp-server](mcp-server.md) |
 | 📊 Мониторинг системы и приложений | [monitoring](monitoring.md) |
+| 🖥️ Инвентарь железа и датчики | [hardware](hardware.md) |
 | 💾 Бекапы приложений | [backups](backups.md) |
 | 📁 SFTP-сервер по приложению | [sftp](sftp.md) |
 | 🖥️ WebSocket-консоль приложений | [console](console.md) |

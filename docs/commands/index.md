@@ -11,6 +11,7 @@ guides and background (not just flags), see the [CLI overview](/cli/).
 | [🧰 service](/commands/service) | Manage the systemd service |
 | [🔐 api](/commands/api) | Daemon API state and its bearer tokens |
 | [📋 status](/commands/status) | Daemon version, service state, apps summary |
+| [🖥️ hardware](/commands/hardware) | Machine type, CPU, board, memory, disks, GPUs, temperatures |
 | [📊 stats](/commands/stats) | CPU/memory/disk usage per app |
 | [📱 app](/commands/app) | Manage apps (list, install, start, stop, logs, ...) |
 | [📃 ls](/commands/ls) | List apps, or switch to the ports/disk/stats view |

@@ -23,6 +23,7 @@ Open source CLI utility and daemon written in Rust, installed on the user's serv
 | 📦 Package manager (`asc.yaml`, registries, `asc install`) | [package-manager](package-manager.md) |
 | 🤖 MCP server for AI | [mcp-server](mcp-server.md) |
 | 📊 System and application monitoring | [monitoring](monitoring.md) |
+| 🖥️ Hardware inventory and sensors | [hardware](hardware.md) |
 | 💾 Application backups | [backups](backups.md) |
 | 📁 Per-application SFTP server | [sftp](sftp.md) |
 | 🖥️ WebSocket application console | [console](console.md) |

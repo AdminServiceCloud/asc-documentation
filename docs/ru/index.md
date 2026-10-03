@@ -35,6 +35,7 @@ hero:
     <ArticleCard icon="📦" title="Пакетный менеджер" details="Манифесты asc.yaml, реестры, asc install." link="/ru/cli/package-manager" />
     <ArticleCard icon="🤖" title="MCP-сервер" details="Model Context Protocol сервер для AI-агентов." link="/ru/cli/mcp-server" />
     <ArticleCard icon="📊" title="Мониторинг" details="Мониторинг системы и приложений." link="/ru/cli/monitoring" />
+    <ArticleCard icon="🖥️" title="Железо" details="Инвентарь железа, датчики температуры, видеокарты." link="/ru/cli/hardware" />
     <ArticleCard icon="💾" title="Бекапы" details="Создание, восстановление и ротация бекапов приложений." link="/ru/cli/backups" />
     <ArticleCard icon="📁" title="SFTP" details="SFTP-сервер по приложению." link="/ru/cli/sftp" />
     <ArticleCard icon="📁" title="Файлы" details="Файловый API ноды: обзор, передача, архивирование." link="/ru/cli/files" />

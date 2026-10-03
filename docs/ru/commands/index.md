@@ -12,6 +12,7 @@
 | [🧰 service](/ru/commands/service) | Управление systemd-сервисом |
 | [🔐 api](/ru/commands/api) | Состояние API демона и его bearer-токены |
 | [📋 status](/ru/commands/status) | Версия демона, состояние сервиса, сводка |
+| [🖥️ hardware](/ru/commands/hardware) | Тип машины, процессор, плата, память, диски, видеокарты, температуры |
 | [📊 stats](/ru/commands/stats) | Потребление CPU/памяти/диска по приложениям |
 | [📱 app](/ru/commands/app) | Управление приложениями (list, install, start, stop, logs, ...) |
 | [📃 ls](/ru/commands/ls) | Список приложений или вид ports/disk/stats |
