@@ -29,6 +29,9 @@ Open source CLI utility and daemon written in Rust, installed on the user's serv
 | 🖥️ WebSocket application console | [console](console.md) |
 | ⏰ Task scheduler | [scheduler](scheduler.md) |
 | 🌐 Web server: nginx, sites, Let's Encrypt, Cloudflare real IP | [webserver](webserver.md) |
+| 🛡️ Firewall: nftables table, rules, automatic rollback, RAW mode | [firewall](firewall.md) |
+| 🚫 fail2ban: install, jails, bans through nftables | [fail2ban](fail2ban.md) |
+| 🔐 WireGuard: tunnels, peers, client configs, import of a ready .conf | [wireguard](wireguard.md) |
 | 🔄 The asc-updater update utility | [updater](updater.md) |
 
 Looking for flags and usage for a specific command? See the
@@ -50,7 +53,7 @@ Community files: [🛡️ SECURITY.md](https://github.com/AdminServiceCloud/asc-
 │   │   ├── apps/     # drivers: docker, systemd, process
 │   │   ├── pkg/      # package manager + registries
 │   │   ├── mcp/      # MCP server
-│   │   ├── backup/ monitor/ sftp/ console/ scheduler/ webserver/
+│   │   ├── backup/ monitor/ sftp/ console/ scheduler/ webserver/ firewall/ fail2ban/ wireguard/
 │   │   ├── i18n/     # translation system for command output (EN/RU)
 │   │   └── config/   # /etc/asc/config.toml
 │   └── updater/      # 🔄 asc-updater — a separate update binary (see updater.md)

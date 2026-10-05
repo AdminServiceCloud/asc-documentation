@@ -43,6 +43,9 @@ hero:
     <ArticleCard icon="🖥️" title="Консоль" details="WebSocket-консоль приложений и live-логи." link="/ru/cli/console" />
     <ArticleCard icon="⏰" title="Планировщик" details="Планировщик повторяющихся задач." link="/ru/cli/scheduler" />
     <ArticleCard icon="🌐" title="Веб-сервер" details="nginx, приложения на доменах, Let's Encrypt, реальные IP за Cloudflare." link="/ru/cli/webserver" />
+    <ArticleCard icon="🛡️" title="Файрвол" details="Правила nftables с автооткатом, списки IP, порты Docker." link="/ru/cli/firewall" />
+    <ArticleCard icon="🚫" title="fail2ban" details="Установка, jail'ы для SSH и nginx, баны через nftables." link="/ru/cli/fail2ban" />
+    <ArticleCard icon="🔐" title="WireGuard" details="Туннели, пиры с готовыми клиентскими конфигами, AllowedIPs, импорт .conf." link="/ru/cli/wireguard" />
     <ArticleCard icon="🔄" title="Обновления" details="asc-updater — автообновления, каналы, откат." link="/ru/cli/updater" />
     <ArticleCard icon="🔗" title="Платформа" details="Подключение ноды по токену регистрации или через asc connect." link="/ru/cli/platform" />
   </div>
