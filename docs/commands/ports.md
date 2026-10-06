@@ -11,7 +11,7 @@ asc ports [-l | --listening]
 
 ## Options
 
-- **`-l`, `--listening`** — real listening ports on the host (DMN-103),
+- **`-l`, `--listening`** — real listening ports on the host,
   not what apps declare: parses `/proc/net/*` directly and merges in
   Docker container attribution and this daemon's own API port.
 

@@ -14,10 +14,6 @@
 - **Сервер**: встроенный SSH/SFTP-субсистема на Rust (russh), отдельный порт (по умолчанию 2022), без системных пользователей ОС.
 - **Изоляция**: виртуальный chroot на каталог приложения (volumes для Docker, рабочий каталог для нативных); path traversal исключён на уровне резолвера путей.
 - **Учётки**: временные credentials/ключи выдаёт платформа с привязкой `пользователь → приложение → права (ro/rw)`; TTL и ревокация.
-- **Права**: выдача SFTP-доступа — право `apps.files` ([🔐 access-control](https://github.com/AdminServiceCloud/asc-platform/blob/main/docs/features/access-control.md)).
+- **Права**: выдача SFTP-доступа — право `apps.files` (🔐 access-control).
 - **Квоты и лимиты**: ограничение размера загрузки, скорости — по тарифу/конфигу.
 - **Аудит**: лог сессий и операций записи.
-
-## 🔗 Связанные задачи
-
-DMN-010 в [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).

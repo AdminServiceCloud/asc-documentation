@@ -65,7 +65,3 @@ claude mcp add asc -- asc mcp serve
 If connection fails, check `asc status`, the daemon service, and the configured
 socket path. Use an absolute `asc` path if it is not on PATH. Do not grant root
 only to make an app visible: confirm the app was installed under the intended UID.
-
-## 🔗 Related tasks
-
-DMN-013, AI-001, AI-002 and AI-003 in the [ASC roadmap](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).

@@ -65,7 +65,3 @@ claude mcp add asc -- asc mcp serve
 При ошибке проверьте `asc status`, сервис daemon и путь к сокету в конфигурации.
 Если `asc` не найден, укажите абсолютный путь. Не выдавайте root-доступ только
 для видимости приложения: убедитесь, что оно установлено под нужным UID.
-
-## 🔗 Связанные задачи
-
-DMN-013, AI-001, AI-002 и AI-003 в [roadmap ASC](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md).

@@ -22,7 +22,3 @@ This feature is **SSH-key-only by design**: the daemon never handles a Linux pas
 - **Shell**: must be an absolute path already listed in `/etc/shells`.
 - **Groups**: `SetUserGroups` always replaces the full supplementary set, never a partial add/remove.
 - **Authorized keys**: idempotent add (a duplicate fingerprint returns the existing entry), fingerprint-based remove, and options-string lines (`command="...",...`) are left untouched rather than parsed.
-
-## 🔗 Related tasks
-
-DMN-100 in [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md) adds `UserService`; the `users` capability flag gates the platform's "Users" tab client-side.

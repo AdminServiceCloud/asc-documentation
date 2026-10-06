@@ -67,7 +67,7 @@ Community files: [🛡️ SECURITY.md](https://github.com/AdminServiceCloud/asc-
 ```
 
 - **Proto contracts**: the daemon API is described by protobuf contracts **in this repository** (the `proto/` directory) — the daemon is open source and its contracts are public together with it. The AdminService.Cloud platform **links the contracts from here** (a buf dependency) and generates its clients from them; the daemon's Rust code is generated from the same `.proto` files (prost/tonic). One source of truth — always compatible schemas.
-- **REST transport**: besides ConnectRPC the daemon serves a **REST API** (JSON over HTTP: `GET/POST/DELETE /v1/...`) — both transports run **simultaneously on one HTTP server** and call the same service layer. REST routes are derived from the same proto contracts (a mapping in the style of `google.api.http` annotations), so the schemas never drift apart; authentication and visibility rules are shared by both transports (DMN-005).
+- **REST transport**: besides ConnectRPC the daemon serves a **REST API** (JSON over HTTP: `GET/POST/DELETE /v1/...`) — both transports run **simultaneously on one HTTP server** and call the same service layer. REST routes are derived from the same proto contracts (a mapping in the style of `google.api.http` annotations), so the schemas never drift apart; authentication and visibility rules are shared by both transports.
 - **Platforms**: first-class support — **Debian and Ubuntu**; the architecture is designed with other distributions (CentOS/RHEL, Fedora, Arch, etc.) and macOS in mind — everything distro-specific hides behind abstractions. Architectures: x86_64, ARM64, ARMv7.
 - **Service management**: the daemon's API service is run through systemd by the daemon's own commands — `asc service install|start|stop|restart|status` (install creates a systemd unit and enables autostart).
 - **Autonomy**: the daemon fully works without the platform (CLI + local API) — this is fundamental to its open source value.
@@ -75,7 +75,3 @@ Community files: [🛡️ SECURITY.md](https://github.com/AdminServiceCloud/asc-
 - **Localization**: the language setting is stored in the config (`language` in `/etc/asc/config.toml`), chosen at install time and changed with `asc config lang en|ru` — it affects the output of all commands through the translation system (`src/daemon/i18n/`); debug messages are not translated.
 - **Debug logging**: `asc config debug on|off` toggles `[log] level` between `debug` and `info` in `config.toml` (`RUST_LOG` still overrides it); every command initializes tracing, not just `asc serve`, so e.g. `asc install` streams Docker image-pull progress to stderr — useful when a long install looks stuck with no output.
 - **Updates**: a separate utility, [🔄 asc-updater](updater.md) — auto-updates (can be disabled), stable/beta channels, rollback; at install time it shows the default settings and asks: install with them or change.
-
-## 🔗 Related tasks
-
-DMN-001…DMN-020 in [ROADMAP.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP.md); GRW-005 in [ROADMAP-GROWTH.md](https://github.com/AdminServiceCloud/asc-platform/blob/main/ROADMAP-GROWTH.md).
