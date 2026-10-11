@@ -24,9 +24,15 @@ manage every application. No MCP argument can select another UID or role.
 |---|---|---|
 | `system_info`, `metrics_get` | daemon and application metrics | read-only |
 | `app_list`, `app_info`, `logs_read`, `app_settings_get` | application data | read-only |
-| `app_install`, `app_upgrade`, `app_control`, `app_settings_update` | application management | mutating |
+| `app_install`, `app_upgrade`, `app_rebuild`, `app_control`, `app_settings_update` | application management | mutating |
 | `backup_list`, `backup_create`, `backup_restore`, `backup_prune` | local backups | restore is destructive |
 | `app_remove`, `exec_command` | removal and host commands | destructive |
+
+`app_upgrade` upgrades a stopped app — or a docker compose app in place, while
+it runs. `app_rebuild` (`app`, optional `service`, `pull_source` — default
+`true`, forced `false` with a `service`) pulls or builds the app's images afresh
+and recreates its containers without changing its version; see
+[📱 app-management](/cli/app-management).
 
 The daemon resolves and authorizes every app reference. A foreign and an
 unknown app return the same `not found` error. Destructive tools carry MCP

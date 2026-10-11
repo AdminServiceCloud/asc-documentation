@@ -21,6 +21,7 @@ guides and background (not just flags), see the [CLI overview](/cli/).
 | [⬇️ install](/commands/install) | Install from a registry or git URL |
 | [🔗 attach](/commands/attach) | Attach to an app's console |
 | [⏫ upgrade](/commands/upgrade) | Upgrade an app to a new version |
+| [🧱 rebuild](/commands/rebuild) | Rebuild an app's images and containers without changing its version |
 | [🔍 search](/commands/search) | Search packages in configured registries |
 | [🔄 update](/commands/update) | Refresh registry indexes |
 | [🗂️ source](/commands/source) | Manage registry sources |

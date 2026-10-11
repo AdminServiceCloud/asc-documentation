@@ -76,37 +76,80 @@ asc app upgrade <spec>
 
 Upgrade the app to a new version — same as top-level [`asc upgrade`](/commands/upgrade).
 
+### rebuild
+
+```
+asc app rebuild <app> [--service <service>] [--no-pull]
+```
+
+Rebuild the app without changing its version: pull or build its images afresh
+and force-recreate its containers — same as top-level
+[`asc rebuild`](/commands/rebuild), see its page for details.
+
+- **`--service <service>`** — one service of a docker compose app only
+  (implies `--no-pull`).
+- **`--no-pull`** — do not fetch the ref the app follows first.
+
+### services
+
+```
+asc app services <id>
+```
+
+List the services of a docker compose app: state, health, image and
+published ports of each service's first container (`missing` — the service
+has no container).
+
 ### start
 
 ```
-asc app start <id> [-d|--detach]
+asc app start <id> [-d|--detach] [--service <service>]
 ```
 
 Start the app and attach to its console (Docker apps, interactive terminal).
 
 - **`-d`, `--detach`** — start in the background without attaching.
+- **`--service <service>`** — start one service of a docker compose app.
 
 ### stop
 
 ```
-asc app stop <id>
+asc app stop <id> [--service <service>]
 ```
+
+- **`--service <service>`** — stop one service of a docker compose app; the
+  next start, rebuild or upgrade of the app brings it back.
+
+### kill
+
+```
+asc app kill <id> [--service <service>]
+```
+
+Force-stop: SIGKILL, no graceful shutdown (for an app stuck stopping).
+
+- **`--service <service>`** — kill one service of a docker compose app.
 
 ### restart
 
 ```
-asc app restart <id>
+asc app restart <id> [--service <service>]
 ```
+
+- **`--service <service>`** — restart one service of a docker compose app.
 
 ### logs
 
 ```
-asc app logs <id> [-n|--tail <n>]
+asc app logs <id> [-n|--tail <n>] [-t|--timestamps] [--service <service>]
 ```
 
 Show app logs.
 
 - **`-n`, `--tail <n>`** — number of trailing lines. Default: `100`.
+- **`-t`, `--timestamps`** — prefix each line with its timestamp.
+- **`--service <service>`** — one service of a docker compose app, without
+  the service-name prefix.
 
 ### settings
 

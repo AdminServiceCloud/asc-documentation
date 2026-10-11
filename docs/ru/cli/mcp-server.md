@@ -24,9 +24,15 @@ MCP — все. UID и роль нельзя передать параметро
 |---|---|---|
 | `system_info`, `metrics_get` | метрики daemon и приложений | только чтение |
 | `app_list`, `app_info`, `logs_read`, `app_settings_get` | данные приложения | только чтение |
-| `app_install`, `app_upgrade`, `app_control`, `app_settings_update` | управление | изменение |
+| `app_install`, `app_upgrade`, `app_rebuild`, `app_control`, `app_settings_update` | управление | изменение |
 | `backup_list`, `backup_create`, `backup_restore`, `backup_prune` | локальные бекапы | restore разрушителен |
 | `app_remove`, `exec_command` | удаление и команды хоста | разрушительные |
+
+`app_upgrade` обновляет остановленное приложение — или docker compose-приложение
+на месте, не останавливая его. `app_rebuild` (`app`, необязательный `service`,
+`pull_source` — по умолчанию `true`, с `service` принудительно `false`) заново
+скачивает или собирает образы приложения и пересоздаёт его контейнеры без смены
+версии; см. [📱 app-management](/ru/cli/app-management).
 
 Daemon разрешает и авторизует каждую ссылку на приложение. Чужое и
 несуществующее приложение возвращают одинаковый `not found`. Разрушительные

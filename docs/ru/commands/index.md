@@ -22,6 +22,7 @@
 | [⬇️ install](/ru/commands/install) | Установка из реестра или git URL |
 | [🔗 attach](/ru/commands/attach) | Подключение к консоли приложения |
 | [⏫ upgrade](/ru/commands/upgrade) | Обновление приложения до новой версии |
+| [🧱 rebuild](/ru/commands/rebuild) | Пересборка образов и контейнеров приложения без смены версии |
 | [🔍 search](/ru/commands/search) | Поиск пакетов в настроенных реестрах |
 | [🔄 update](/ru/commands/update) | Обновление индексов реестров |
 | [🗂️ source](/ru/commands/source) | Управление источниками реестров |
