@@ -47,6 +47,8 @@ Without Task, the same commands are `pnpm install`, `pnpm docs:dev`, `pnpm docs:
 
 Every push to `main` builds the site and deploys it to GitHub Pages via `.github/workflows/deploy.yml`; every pull request runs `.github/workflows/ci.yml` to make sure the build (including link checking) still passes.
 
+Self-hosted copy (docs.adminservice.cloud): `docker compose up -d --build` builds the same site into an nginx image (`Dockerfile`, `compose.yaml`) and publishes it on `127.0.0.1:8080`; set `HTTP_PORT` / `HTTP_BIND` in `.env` and put a TLS reverse proxy in front.
+
 ## 🤝 Contributing
 
 Follow the documentation conventions from [asc-daemon](https://github.com/AdminServiceCloud/asc-daemon)'s [AGENTS.md](https://github.com/AdminServiceCloud/asc-daemon/blob/main/AGENTS.md): English-first, Russian mirrored, emoji in headings, commits in English following [Conventional Commits](https://www.conventionalcommits.org/).

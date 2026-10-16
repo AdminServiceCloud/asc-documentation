@@ -1,0 +1,12 @@
+# Self-hosted docs site (static VitePress build behind nginx), e.g. under ASC.
+# Host-specific values come from .env: HTTP_BIND/HTTP_PORT (published address,
+# loopback by default — put a reverse proxy with TLS in front) and DOCS_IMAGE.
+services:
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${DOCS_IMAGE:-asc-docs}
+    ports:
+      - "${HTTP_BIND:-127.0.0.1}:${HTTP_PORT:-8080}:80"
+    restart: unless-stopped
