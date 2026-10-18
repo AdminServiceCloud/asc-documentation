@@ -30,5 +30,6 @@ guides and background (not just flags), see the [CLI overview](/cli/).
 | [⏰ schedule](/commands/schedule) | Scheduled jobs: reboots, app lifecycle, backups, commands, HTTP checks |
 | [🌐 web](/commands/web) | The node's web server: nginx, sites, Let's Encrypt |
 | [⚙️ config](/commands/config) | CLI language, debug logging |
+| [🗃️ db](/commands/db) | The daemon's local database: status, verify, rebuild |
 | [🔁 autoupdate](/commands/autoupdate) | Enable/disable auto-updates |
 | [🐳 docker](/commands/docker) | Every container on the host, ASC-managed or not |
