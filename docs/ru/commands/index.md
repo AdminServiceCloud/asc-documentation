@@ -31,5 +31,6 @@
 | [⏰ schedule](/ru/commands/schedule) | Задачи по расписанию: перезапуски, приложения, бекапы, команды, HTTP-проверки |
 | [🌐 web](/ru/commands/web) | Веб-сервер ноды: nginx, сайты, Let's Encrypt |
 | [⚙️ config](/ru/commands/config) | Язык CLI, debug-логирование |
+| [🗃️ db](/ru/commands/db) | Локальная база демона: состояние, сверка, пересборка |
 | [🔁 autoupdate](/ru/commands/autoupdate) | Включение/выключение автообновлений |
 | [🐳 docker](/ru/commands/docker) | Все контейнеры хоста — и ASC-овские, и чужие |
