@@ -103,13 +103,15 @@ has no container).
 ### start
 
 ```
-asc app start <id> [-d|--detach] [--service <service>]
+asc app start <id> [-d|--detach] [--service <service>] [--force]
 ```
 
 Start the app and attach to its console (Docker apps, interactive terminal).
 
 - **`-d`, `--detach`** — start in the background without attaching.
 - **`--service <service>`** — start one service of a docker compose app.
+- **`--force`** — start even though required first-time setup questions are
+  still unanswered; the decision is remembered until they all get an answer.
 
 ### stop
 
@@ -133,10 +135,12 @@ Force-stop: SIGKILL, no graceful shutdown (for an app stuck stopping).
 ### restart
 
 ```
-asc app restart <id> [--service <service>]
+asc app restart <id> [--service <service>] [--force]
 ```
 
 - **`--service <service>`** — restart one service of a docker compose app.
+- **`--force`** — restart even though required first-time setup questions are
+  still unanswered, like `start --force`.
 
 ### logs
 

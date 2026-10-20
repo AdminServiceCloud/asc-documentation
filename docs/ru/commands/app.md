@@ -106,7 +106,7 @@ asc app services <id>
 ### start
 
 ```
-asc app start <id> [-d|--detach] [--service <сервис>]
+asc app start <id> [-d|--detach] [--service <сервис>] [--force]
 ```
 
 Запустить приложение и подключиться к его консоли (Docker-приложения,
@@ -114,6 +114,8 @@ asc app start <id> [-d|--detach] [--service <сервис>]
 
 - **`-d`, `--detach`** — запуск в фоне без подключения к консоли.
 - **`--service <сервис>`** — запустить один сервис docker compose-приложения.
+- **`--force`** — запустить, даже если на обязательные вопросы первичной
+  настройки ещё нет ответа; решение запоминается, пока на них не ответят.
 
 ### stop
 
@@ -138,10 +140,12 @@ asc app kill <id> [--service <сервис>]
 ### restart
 
 ```
-asc app restart <id> [--service <сервис>]
+asc app restart <id> [--service <сервис>] [--force]
 ```
 
 - **`--service <сервис>`** — перезапустить один сервис docker compose-приложения.
+- **`--force`** — перезапустить, даже если на обязательные вопросы первичной
+  настройки ещё нет ответа, как `start --force`.
 
 ### logs
 
